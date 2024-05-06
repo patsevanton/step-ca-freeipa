@@ -256,8 +256,6 @@ sudo chown -R ubuntu:ubuntu /etc/docker-compose
 Запускаем FreeIPA для генерации CSR c параметром `--external-ca`
 ```shell
 cat <<EOF | sudo tee /etc/docker-compose/docker-compose.yaml
-version: "3.8"
-
 services:
   freeipa:
     image: freeipa/freeipa-server:fedora-39-4.11.1
@@ -323,26 +321,24 @@ CSR FreeIPA сохранится по пути /etc/docker-compose/freeipa-data/
 openssl req -text -noout -verify -in /etc/docker-compose/freeipa-data/ipa.csr
 ```
 
-Копируем `/etc/docker-compose/freeipa-data/ipa.csr` c FreeIPA сервера в `/etc/step-ca/ipa.csr` на сервер Step-CA.
+Копируем `/etc/docker-compose/freeipa-data/ipa.csr` c FreeIPA сервера в `/etc/step-ca/certs/ipa.csr` на сервер Step-CA.
 
 Подпишем зашифрованный запрос на выпуск сертификата (csr) FreeIPA корневым сертификатом CA, так как в FreeIPA csr указано поле `CA:True` и только корневой сертификат может его подписать. Потребуем пароль из файла /etc/step-ca/password.txt
 ```shell
-sudo step certificate sign --profile intermediate-ca /etc/step-ca/ipa.csr /etc/step-ca/certs/root_ca.crt /etc/step-ca/secrets/root_ca_key | sudo tee -a /etc/step-ca/ipa.crt
+sudo step certificate sign --profile intermediate-ca /etc/step-ca/certs/ipa.csr /etc/step-ca/certs/root_ca.crt /etc/step-ca/secrets/root_ca_key | sudo tee -a /etc/step-ca/certs/ipa.crt
 ```
 
 Просмотр crt
 ```shell
-openssl x509 -noout -text -in /etc/step-ca/ipa.crt
+openssl x509 -noout -text -in /etc/step-ca/certs/ipa.crt
 ```
 
 Копируем `/etc/step-ca/certs/root_ca.crt` c сервера Step-CA в `/etc/docker-compose/ca/root_ca.crt` на сервер FreeIPA
 
-Копируем `/etc/step-ca/ipa.crt` c сервера step-ca в `/etc/docker-compose/freeipa-certificate/ipa.crt` на сервер FreeIPA
+Копируем `/etc/step-ca/certs/ipa.crt` c сервера step-ca в `/etc/docker-compose/freeipa-certificate/ipa.crt` на сервер FreeIPA
 
 Обновляем /etc/docker-compose/docker-compose.yaml
 ```yaml
-version: "3.8"
-
 services:
   freeipa:
     image: freeipa/freeipa-server:fedora-39-4.11.1
