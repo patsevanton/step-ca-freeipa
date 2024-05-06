@@ -431,7 +431,7 @@ sudo journalctl -u freeipa
 ```
 
 ### Установка корневых сертификатов Step-CA
-Прописываем `ca.mydomain.int` либо в DNS либо в /etc/hosts
+Прописываем `ca.mydomain.int` и `freeipa.mydomain.int` либо в DNS либо в /etc/hosts
 ```shell
 sudo nano /etc/hosts
 ```
