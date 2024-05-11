@@ -109,7 +109,7 @@ certs  config  db  secrets  templates
 Сохраните пароль PKI в `/etc/step-ca/password.txt`, чтобы его можно было прочитать при запуске сервера. Ограничьте доступ к этому файлу для других пользователей.
 ```shell
 sudo nano /etc/step-ca/password.txt
-chmod 600 /etc/step-ca/password.txt
+sudo chmod 600 /etc/step-ca/password.txt
 ```
 
 Обратите внимание, что вам придется редактировать эти файлы от имени root, поэтому убедитесь, что вы указали `sudo vi` или `sudo nano` для редактирования этих файлов.
